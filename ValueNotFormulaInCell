@@ -1,0 +1,5 @@
+Sub ConvertToValues()
+With ActiveSheet.UsedRange
+.Value = .Value
+End With
+End Sub
