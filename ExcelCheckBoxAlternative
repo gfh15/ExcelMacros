@@ -1,0 +1,93 @@
+'Code for Worksheet "Cells as Checkboxes"
+ 
+Option Explicit 
+ 
+Private Sub Worksheet_BeforeDoubleClick(ByVal Target As Range, Cancel As Boolean) 
+     'Limit Target count to 1
+    If Target.Count > 1 Then Exit Sub 
+     'Isolate Target to a specific range
+    If Intersect(Target, Range("myChecks")) Is Nothing Then Exit Sub 
+     'set Target font tp "marlett"
+    Target.Font.Name = "marlett" 
+     'Check value of target
+    If Target.Value <> "a" Then 
+        Target.Value = "a" 'Sets target Value = "a"
+        Cancel = True 
+        Exit Sub 
+    End If 
+    If Target.Value = "a" Then 
+        Target.ClearContents 'Sets Target Value = ""
+        Cancel = True 
+        Exit Sub 
+    End If 
+End Sub 
+ 
+ 'Code for Worksheet "Mutually Exclusive examples"
+ 
+Option Explicit 
+ 
+Private Sub Worksheet_BeforeDoubleClick(ByVal Target As Range, Cancel As Boolean) 
+     'Limit Target count to 1
+    If Target.Count > 1 Then Exit Sub 
+     'Isolate Target to a specific range
+    If Intersect(Target, Range("Ckboxes")) Is Nothing Then Exit Sub 
+     'Set Target font to "marlett"
+    Target.Font.Name = "marlett" 
+     'Check value of target
+    If Target.Value <> "a" Then 
+        Target.Value = "a" 'Sets target Value = "a"
+        Cancel = True 
+        Exit Sub 
+    End If 
+    If Target.Value = "a" Then 
+        Target.ClearContents 'Sets target Value = ""
+        Cancel = True 
+        Exit Sub 
+    End If 
+End Sub 
+ 
+Private Sub Worksheet_Change(ByVal Target As Range) 
+     'Limit Target count to 1
+    If Target.Count > 1 Then Exit Sub 
+     'Isolate Target to a specific range
+    If Intersect(Target, Range("Ckboxes")) Is Nothing Then Exit Sub 
+     'Select a specific subset of the range "Ckboxes"
+    Select Case Target.Address 
+    Case Is = "$D$2", "$D$4", "$D$6" 
+         'Clear Contents of cells that are not the target
+        If Target.Address = "$D$2" Then [D4,D6].ClearContents 
+        If Target.Address = "$D$4" Then [D2,D6].ClearContents 
+        If Target.Address = "$D$6" Then [D2,D4].ClearContents 
+         'Place the address of the "checked" cell in "$D$11"
+        Range("$D$11").Value = Target.Address 
+    Case Is = "$H$3", "$H$5" 
+         'Clear Contents of cells that are not the target
+        If Target.Address = "$H$3" Then [H5,H5].ClearContents 
+        If Target.Address = "$H$5" Then [H3,H3].ClearContents 
+         'Place the address of the "checked" cell in "$H$11"
+        Range("$H$11").Value = Target.Address 
+    Case Else 
+         'Populate the cell to the right of Target with its status
+        If Target.Value = "a" Then 
+            Target.Offset(0, 1) = "Checked" 
+Else: 
+            Target.Offset(0, 1).Value = "Not Checked" 
+        End If 
+    End Select 
+End Sub 
+
+
+
+			
+How to use:
+
+Open the example workbook and activate the sheet "Cells as CheckBoxes". Doubleclick on any of the indicated cells. The cells will toggle between a "check" and null. Now activate the sheet "Mutually Exclusive examples" and double click on different indicated cells. Note the effect of doubleclicks in each color group.
+ 
+Test the code:
+
+Right Click on the sheet tab and choose "View code". Paste the code for the worksheet "Cells as Checkboxes" in the panel. Select the cells you want to specify as "checkbox" cells and give them a name ("myChecks" in example). You can select non-contiguous cells by holding down the CTRL key. Now when you double click on one of these cells, it will toggle between a "check" and null.
+For the second part, paste the code for the worksheet "Mutually Exclusive example" in the worksheet module as described above. Again, select the cells to specify and name them. The code on this sheet is set for a named range "Ckboxes". Also, the Change Events are cell specific. You can modify the ranges if needed.
+Hint: Deselect "Edit directly in cells" using Tools>Options>Edit Tab
+ 
+	
+
